@@ -34,15 +34,21 @@ exports.createTask = async (req, res) => {
 
 //Fetch all Tasks
 exports.allTask = async (req, res) => {
-  const allTasks = await tasks.findAll({
-    include: {
-      model: users,
-      attributes: ["id", "email", "username"],
-    },
-  });
-  console.log(allTasks);
-  res.send("alltask fetch successfully");
-};
+  try {
+    const allTasks = await tasks.findAll({
+      include: {
+        model: users,
+        attributes: ["id", "email", "username"],
+      },
+    });
+    console.log(allTasks);
+    res.send("alltask fetch successfully");
+  }
+  catch (error) {
+    res.send("error",error)
+  }
+  
+}
 
 //Fetch Single Task
 exports.singleTask = async (req, res) => {
@@ -58,21 +64,30 @@ exports.singleTask = async (req, res) => {
     });
     console.log(task);
     res.send("single task fetch successfully");
-  } catch (error) {
-    res.send("error:", error);
-  }
+  }catch (err) {
+      console.error(err);
+      return res.status(500).send("Internal Server Error");
+    
 };
+}
 
 //Delete Task
 exports.deleteTask = async (req, res) => {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
   await tasks.destroy({
     where: {
       id: id,
     },
   });
   res.send("deleted successfully");
-};
+  } catch (err) {
+    console.error(err);
+    return res.status(400).send("Error",err);
+  }
+  
+}
+
 
 //Edit and Update Task
 exports.editTask = async (req, res) => {
@@ -87,7 +102,7 @@ exports.editTask = async (req, res) => {
       return res.status(404).send("Task not found");
     }
 
-    // // Check if the user is the owner of the task
+    // Check if the user is the owner of the task
     if (task.userId !== userId) {
       return res.status(403).send("You cannot edit this task");
     }
@@ -106,6 +121,7 @@ exports.editTask = async (req, res) => {
     );
 
     return res.status(200).json({ message: "Task updated successfully" });
+    
   } catch (err) {
     console.error(err);
     return res.status(500).send("Internal Server Error");

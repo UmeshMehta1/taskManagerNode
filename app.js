@@ -27,23 +27,11 @@ app.use(async(req,res,next)=>{
             res.locals.currentUserId = decryptedResult.id
         }
     }
-
     next()
 })
 
 app.use("",authRoute)
 app.use("",taskRoute)
-
-app.use((err, req, res, next) => {
-    console.error(err);
-    res.status(500).json({ error: 'Internal Server Error' });
-});
-
-
-
-app.get("/hello",(req,res)=>{
-    res.send({message:"Hello World"})
-})
 
 
 app.listen(PORT,()=>{

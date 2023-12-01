@@ -3,13 +3,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Sequelize } = require("sequelize");
 
-exports.renderRegisterForm = (req, res) => {
-  res.send("Register");
-};
-// Alternative to arrow function
-// exports.registerUser = function(req,res){
-//     res.render("register")
-// }
 
 exports.registerUser = async (req, res) => {
   try {
@@ -93,4 +86,3 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-// exist xaina vaney - > [],xa vaney [{name:"",password:"",email}]
